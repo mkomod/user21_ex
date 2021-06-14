@@ -1,0 +1,43 @@
+#!/bin/bash
+
+print_help () {	
+    echo "Please provide the package name"
+}
+
+create_namespace () {
+nspace="importFrom(Rcpp, sourceCpp)
+useDynLib($project_name, .registration=TRUE)"
+    echo "$nspace" > NAMESPACE
+}
+
+create_description () {
+desc="Package: $project_name
+Type: Package
+Title: $project_name
+Version: 1.0
+Date: $(date +%Y-%m-%d)
+Author: Michael Komodromos
+Maintainer: Michael Komodromos <mk1019@ic.ac.uk>
+Description:
+License:
+Imports: Rcpp
+LinkingTo: Rcpp, RcppArmadillo"
+    echo "$desc" > DESCRIPTION
+}
+
+make_dirs () {
+    mkdir man R
+}
+
+if [ -z $1 ]
+then
+    print_help
+    exit 1
+fi
+
+project_name=$1
+
+create_description
+create_namespace
+make_dirs
+
