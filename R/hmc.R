@@ -11,6 +11,7 @@ y <- x %*% b + rnorm(nrow(x))
 
 plot(seq(0, 4, length.out=20), y)
 
+
 # ----------------------------------------
 # Test our C++ implementation
 # ----------------------------------------
@@ -18,6 +19,7 @@ mu_beta <- matrix(rep(0, 2))
 s_beta <- matrix(rep(5, 2))
 L(b, y, x, 1, mu_beta, s_beta) == log(prod(dnorm(y, x %*% b, 1)) * prod(dnorm(c(b), mu_beta, s_beta)))
 # if this works then our gradient function is also correct
+
 
 # ----------------------------------------
 # HMC
@@ -74,13 +76,13 @@ apply(B, 1, mean)
 apply(B, 1, sd)
 
 f <- MASS::kde2d(B[2,], B[1,], lims=c(1,3,-1,1), n=250)
-png("hmc.png", width=800, height=800)
+# png("hmc.png", width=800, height=800)
 par(mfrow=c(2,2), mar=c(2,2,2,2))
 plot(density(B[1, ]), col="purple", lwd=2, main=expression(beta[1]))
 image(f, useRaster=T, col=hcl.colors(12, "purples", rev=T))
 plot.new()
 plot(density(B[2, ]), col="purple", lwd=2, main=expression(beta[2]))
-dev.off()
+# dev.off()
 
 
 # ----------------------------------------
@@ -89,6 +91,5 @@ dev.off()
 optim(par=c(1, 1), 
     fn=function(b) -L(b, y, x, 1, mu_beta, s_beta), 
     gr=function(b) -grad_L(b, y, x, 1, mu_beta, s_beta), method="CG")
-
 
 
